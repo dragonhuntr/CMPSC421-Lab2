@@ -3,6 +3,19 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Customer = require('../models/Customer');
 
+async function processOrder(orderId) {
+    return new Promise((resolve) => {
+        setTimeout(async () => {
+            const order = await Order.findById(orderId);
+            if (order) {
+                order.status = 'completed';
+                await order.save();
+            }
+            resolve();
+        }, 2000);
+    });
+}
+
 router.post('/', async (req, res) => {
   try {
     // check if customer exists
@@ -12,7 +25,11 @@ router.post('/', async (req, res) => {
     }
 
     const order = new Order(req.body);
+    order.status = 'pending';
     await order.save();
+
+    // process order
+    processOrder(order._id);
 
     res.status(201).json(order);
   } catch (error) {
