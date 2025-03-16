@@ -11,6 +11,9 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
+// express routes
+app.use('/api/customers', require('./routes/customerRoutes'));
+
 // error handling
 app.use((err, req, res, next) => {
     console.error(err.stack);
