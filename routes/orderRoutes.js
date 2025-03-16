@@ -16,6 +16,25 @@ async function processOrder(orderId) {
     });
 }
 
+/**
+ * @swagger
+ * /api/orders:
+ *   post:
+ *     summary: Create a new order
+ *     tags: [Orders]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Order'
+ *     responses:
+ *       201:
+ *         description: Order created successfully
+ *       400:
+ *         description: Invalid request data
+ */
+
 router.post('/', async (req, res) => {
     try {
         // check if customer exists
@@ -37,6 +56,51 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/orders:
+ *   get:
+ *     summary: Get all orders
+ *     tags: [Orders]
+ *     responses:
+ *       200:
+ *         description: List of orders
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Order'
+ */
+
+router.get('/', async (req, res) => {
+    try {
+        const orders = await Order.find().populate('customer');
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   get:
+ *     summary: Get an order by ID
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Order details
+ *       404:
+ *         description: Order not found
+ */
+
 router.get('/:id', async (req, res) => {
     try {
         const order = await Order.findById(req.params.id).populate('customer');
@@ -48,6 +112,27 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+/**
+ * @swagger
+ * /api/orders/{id}/cancel:
+ *   patch:
+ *     summary: Cancel an order
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Order cancelled successfully
+ *       404:
+ *         description: Order not found
+ *       400:
+ *         description: Order cannot be cancelled
+ */
 
 router.patch('/:id/cancel', async (req, res) => {
     try {

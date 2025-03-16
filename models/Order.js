@@ -1,5 +1,40 @@
 const mongoose = require('mongoose');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Order:
+ *       type: object
+ *       required:
+ *         - customer
+ *         - items
+ *         - totalAmount
+ *       properties:
+ *         customer:
+ *           type: string
+ *           description: Customer ID
+ *         items:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               quantity:
+ *                 type: number
+ *               price:
+ *                 type: number
+ *         totalAmount:
+ *           type: number
+ *           description: Total order amount
+ *         status:
+ *           type: string
+ *           enum: [pending, processing, completed, cancelled]
+ *         paymentStatus:
+ *           type: string
+ *           enum: [pending, paid, failed]
+ */
 const orderSchema = new mongoose.Schema({
     customer: {
         type: mongoose.Schema.Types.ObjectId,
