@@ -6,7 +6,7 @@ RESTful API built with Node.js, Express.js, and MongoDB that manages customers, 
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/dragonhuntr/CMPSC421-Lab2
 cd cmpsc421-lab2
 ```
 
